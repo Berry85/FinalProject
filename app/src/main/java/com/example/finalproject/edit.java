@@ -59,7 +59,6 @@ public class edit extends AppCompatActivity {
                 data = new Data(name, phone, false, email, note);
                 bundle.putSerializable("data1", data);
                 intent.putExtras(bundle);
-                Log.d("abc", data.toString());
                 setResult(100, intent);
                 finish();
             }

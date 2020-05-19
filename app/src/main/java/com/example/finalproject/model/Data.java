@@ -65,6 +65,9 @@ public class Data implements Serializable {
     @NonNull
     @Override
     public String toString() {
-        return "Name:" + this.getName() + ";   phone:" + this.getPhone() + ";   note:" + this.getNote() + ";    email:" + this.getEmail();
+        return "Name:" + this.getName() + "/n" +
+                "phone:" + this.getPhone() + "/n" +
+                "note:" + this.getNote() + "/n" +
+                "email:" + this.getEmail() + "/n";
     }
 }

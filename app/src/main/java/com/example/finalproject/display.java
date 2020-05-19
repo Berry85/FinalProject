@@ -4,13 +4,18 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.DrawableRes;
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import com.example.finalproject.model.Data;
 
@@ -19,61 +24,36 @@ public class display extends AppCompatActivity {
     private ImageView imageView;
     private TextView textView9, textView10, textView11, textView12;
     private Data data;
+    private boolean favorite;
 
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        if (resultCode == 100) {
-
-            Data data2 = (Data) data.getExtras().getSerializable("data1");
-            Log.d("abc", data2.toString());
-            textView9.setText(data2.getName());
-            textView10.setText(data2.getPhone());
-            textView11.setText(data2.getEmail());
-            textView12.setText(data2.getNote());
-        }
-        super.onActivityResult(requestCode, resultCode, data);
-    }
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_display);
 
-        button2 = findViewById(R.id.button2);
         imageView = findViewById(R.id.imageView3);
         textView9 = findViewById(R.id.textView9);
         textView10 = findViewById(R.id.textView10);
         textView11 = findViewById(R.id.textView11);
         textView12 = findViewById(R.id.textView12);
 
-        //接受数组
-        Intent intent = this.getIntent();
-        final Bundle bundle = intent.getExtras();
-        final Data data = (Data) bundle.getSerializable("List");
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar3);
+        toolbar.setBackgroundColor(getResources().getColor(R.color.toolbar));
+        setSupportActionBar(toolbar);
 
-        final String name = data.getName();
-        final String phone = data.getPhone();
-        final String email = data.getEmail();
-        final String Note = data.getNote();
+        data = (Data) this.getIntent().getExtras().getSerializable("item");
+
+        favorite = data.isFavorite();
+        String name = data.getName();
+        String phone = data.getPhone();
+        String email = data.getEmail();
+        String Note = data.getNote();
 
         textView9.setText(name);
         textView10.setText(phone);
         textView11.setText(email);
         textView12.setText(Note);
 
-        //编辑button
-        button2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent();
-                Bundle bundle1 = new Bundle();
-                Data data1 = new Data(name, phone, false, email, Note);
-                bundle.putSerializable("data", data1);
-                intent.putExtras(bundle);
-                intent.setClass(display.this, edit.class);
-                startActivityForResult(intent, 100);
-            }
-        });
 
         //点击电话跳转至拨号
         textView10.setOnClickListener(new View.OnClickListener() {
@@ -106,5 +86,50 @@ public class display extends AppCompatActivity {
 
     }
 
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar3);
+        Menu menu = toolbar.getMenu();
+        switch (item.getItemId()) {
+            case R.id.edit:
+                Intent intent = new Intent();
+                Bundle bundle1 = new Bundle();
+                String name, phone, email, Note;
+                boolean favorite1;
+                name = textView9.getText().toString();
+                phone = textView10.getText().toString();
+                email = textView11.getText().toString();
+                Note = textView12.getText().toString();
+                favorite1 = favorite;
+                Data data1 = new Data(name, phone, favorite1, email, Note);
+                bundle1.putSerializable("data", data1);
+                intent.putExtras(bundle1);
+                intent.setClass(display.this, edit.class);
+                startActivityForResult(intent, 100);
 
+            default:
+                break;
+        }
+        return true;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        if (resultCode == 100) {
+
+            Data data2 = (Data) data.getExtras().getSerializable("data1");
+            Log.d("abc", data2.toString());
+            textView9.setText(data2.getName());
+            textView10.setText(data2.getPhone());
+            textView11.setText(data2.getEmail());
+            textView12.setText(data2.getNote());
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.display_toolbar, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
 }

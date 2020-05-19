@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
 import android.view.View;
 
 import com.example.finalproject.adpater.DataAdpater;
@@ -36,13 +37,14 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+        toolbar.setBackgroundColor(getResources().getColor(R.color.toolbar));
         setSupportActionBar(toolbar);
+
         floatingActionButton = findViewById(R.id.floatingActionButton);
 
 //        initData(dataList);
-        Data data = new Data("DAVID", "124512", false, "at3ith@gmail.com", "Sun");
-        dataList.add(data);
+//        Data data = new Data("DAVID", "124512", false, "at3ith@gmail.com", "Sun");
+//        dataList.add(data);
 
         recyclerView = findViewById(R.id.recycleview);
         layoutManager = new LinearLayoutManager(this);
@@ -52,7 +54,6 @@ public class MainActivity extends AppCompatActivity {
 
         recyclerViewAdapter.notifyDataSetChanged();
 
-//        recyclerViewAdapter.getItemId();
 
         floatingActionButton.setOnClickListener(new OnClickListener() {
             @Override
@@ -78,47 +79,6 @@ public class MainActivity extends AppCompatActivity {
         recyclerViewAdapter.notifyDataSetChanged();
     }
 
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        getMenuInflater().inflate(R.menu.toolbar_menu, menu);
-//
-//        MenuItem searchItem = menu.findItem(R.id.search_action);
-//        final SearchView searchView = (SearchView) searchItem.getActionView();
-//        searchView.setQuery("New Item", false);
-//        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-//
-//            @Override
-//
-//            public boolean onQueryTextSubmit(String query) {
-//                onQueryTextChange(query);
-//                if (id == -1) {
-//                    Toast.makeText(getApplicationContext(), "NOT FOUND!!!", Toast.LENGTH_SHORT).show();
-//                } else {
-//                    recyclerView.scrollToPosition(id);
-//                }
-//                return false;
-//            }
-//
-//            @Override
-//            public boolean onQueryTextChange(String newText) {
-//                id = search(newText, dataList);
-//                return false;
-//            }
-//        });
-//        return super.onCreateOptionsMenu(menu);
-//    }
-
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-//        Menu menu = toolbar.getMenu();
-//        MenuItem searchItem = menu.findItem(R.id.search_action);
-//        final SearchView searchView = (SearchView) searchItem.getActionView();
-//        String str;
-//        str = searchView.getQuery().toString();
-//        return true;
-//    }
-
 
     public int search(String name, List list) {
         Pattern pattern = Pattern.compile(name, Pattern.CASE_INSENSITIVE);
@@ -131,16 +91,12 @@ public class MainActivity extends AppCompatActivity {
         return -1;
     }
 
-    public void DataOnClicked(View view) {
-        int id = view.getId();
-        Intent intent = new Intent();
-        intent.setClass(MainActivity.this, display.class);
-        intent.putExtra("dataList", (Serializable) dataList);
-        intent.putExtra("id", id);
-        startActivity(intent);
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.toolbar_menu, menu);
+        return super.onCreateOptionsMenu(menu);
     }
-
-
 }
 
 

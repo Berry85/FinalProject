@@ -80,8 +80,9 @@ public class DataAdpater extends RecyclerView.Adapter<DataAdpater.MyViewHolder> 
             public void onClick(View v) {
                 Intent intent = new Intent(v.getContext(), display.class);
                 Bundle bundle = new Bundle();
-                bundle.putSerializable("List", dataItem);
+                bundle.putSerializable("item", dataItem);
                 intent.putExtras(bundle);
+
                 v.getContext().startActivity(intent);
             }
         });
