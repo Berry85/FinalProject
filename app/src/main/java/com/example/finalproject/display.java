@@ -3,11 +3,13 @@ package com.example.finalproject;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.finalproject.model.Data;
@@ -18,6 +20,20 @@ public class display extends AppCompatActivity {
     private TextView textView9, textView10, textView11, textView12;
     private Data data;
 
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        if (resultCode == 100) {
+
+            Data data2 = (Data) data.getExtras().getSerializable("data1");
+            Log.d("abc", data2.toString());
+            textView9.setText(data2.getName());
+            textView10.setText(data2.getPhone());
+            textView11.setText(data2.getEmail());
+            textView12.setText(data2.getNote());
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,7 +71,7 @@ public class display extends AppCompatActivity {
                 bundle.putSerializable("data", data1);
                 intent.putExtras(bundle);
                 intent.setClass(display.this, edit.class);
-                startActivity(intent);
+                startActivityForResult(intent, 100);
             }
         });
 

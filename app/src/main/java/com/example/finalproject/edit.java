@@ -3,6 +3,7 @@ package com.example.finalproject;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -42,23 +43,25 @@ public class edit extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar2);
         toolbar.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
         setSupportActionBar(toolbar);
-
         getData();
-        final String name = editText1.getText().toString();
-        final String phone = editText2.getText().toString();
-        final String email = editText3.getText().toString();
-        final String Note = editText4.getText().toString();
+
 
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent();
                 Bundle bundle = new Bundle();
-                data = new Data(name, phone, false, email, Note);
+                String name, phone, email, note;
+                name = editText1.getText().toString();
+                phone = editText2.getText().toString();
+                email = editText3.getText().toString();
+                note = editText4.getText().toString();
+                data = new Data(name, phone, false, email, note);
                 bundle.putSerializable("data1", data);
                 intent.putExtras(bundle);
-                intent.setClass(edit.this, MainActivity.class);
-                startActivity(intent);
+                Log.d("abc", data.toString());
+                setResult(100, intent);
+                finish();
             }
         });
 
@@ -75,33 +78,4 @@ public class edit extends AppCompatActivity {
         editText4.setText(data.getNote());
     }
 
-//    @Override
-//    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-//        switch (item.getItemId()) {
-//            case R.id.back:
-//                if (editText1.getText() == null | editText2.getText() == null) {
-//                    builder = new AlertDialog.Builder(edit.this);
-//                    builder.setTitle("Warning!");
-//                    builder.setIcon(R.drawable.ic_warning_black_24dp);
-//                    builder.setMessage("你尚未保存!");
-//
-//                    builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
-//                        @Override
-//                        public void onClick(DialogInterface dialog, int which) {
-//                            Intent intent = new Intent();
-//                            intent.setClass(edit.this, MainActivity.class);
-//                            startActivity(intent);
-//                        }
-//                    });
-//
-//                    builder.setPositiveButton("返回", new DialogInterface.OnClickListener() {
-//                        @Override
-//                        public void onClick(DialogInterface dialog, int which) {
-//                        }
-//                    });
-//                    builder.show();
-//                }
-//        }
-//        return super.onOptionsItemSelected(item);
-//    }
 }

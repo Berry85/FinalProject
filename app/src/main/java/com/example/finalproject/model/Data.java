@@ -1,5 +1,7 @@
 package com.example.finalproject.model;
 
+import androidx.annotation.NonNull;
+
 import java.io.Serializable;
 
 public class Data implements Serializable {
@@ -58,5 +60,11 @@ public class Data implements Serializable {
 
     public void setNote(String note) {
         this.note = note;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return "Name:" + this.getName() + ";   phone:" + this.getPhone() + ";   note:" + this.getNote() + ";    email:" + this.getEmail();
     }
 }

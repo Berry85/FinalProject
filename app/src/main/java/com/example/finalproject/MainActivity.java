@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 
 import com.example.finalproject.adpater.DataAdpater;
@@ -52,17 +53,6 @@ public class MainActivity extends AppCompatActivity {
         recyclerViewAdapter.notifyDataSetChanged();
 
 //        recyclerViewAdapter.getItemId();
-        recyclerView.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                int id = v.getId();
-                Intent intent = new Intent();
-                intent.setClass(MainActivity.this, display.class);
-                intent.putExtra("dataList", (Serializable) dataList);
-                intent.putExtra("id", id);
-                startActivity(intent);
-            }
-        });
 
         floatingActionButton.setOnClickListener(new OnClickListener() {
             @Override
@@ -73,6 +63,19 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+
+    }
+
+    public void initData(List<Data> mdataList) {
+        if (getIntent() == null) {
+            return;
+        }
+        Data data = (Data) getIntent().getExtras().getSerializable("data");
+        int i = mdataList.indexOf(data.getName());
+        mdataList.remove(i);
+        mdataList.add(data);
+        this.dataList = mdataList;
+        recyclerViewAdapter.notifyDataSetChanged();
     }
 
 //    @Override

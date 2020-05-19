@@ -2,6 +2,7 @@ package com.example.finalproject.adpater;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,6 +43,7 @@ public class DataAdpater extends RecyclerView.Adapter<DataAdpater.MyViewHolder> 
         View v = (View) LayoutInflater.from(parent.getContext()).inflate(R.layout.item, parent, false);
         final MyViewHolder vh = new MyViewHolder(v);
 
+
         vh.imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -63,6 +65,8 @@ public class DataAdpater extends RecyclerView.Adapter<DataAdpater.MyViewHolder> 
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
+//        onBindViewHolder(holder, position);
+        Log.d("holder", holder.textView.toString());
         final Data dataItem = mdataList.get(position);
         holder.textView.setText(dataItem.getName());
         if (dataItem.isFavorite() == false) {
@@ -78,7 +82,6 @@ public class DataAdpater extends RecyclerView.Adapter<DataAdpater.MyViewHolder> 
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("List", dataItem);
                 intent.putExtras(bundle);
-                Toast.makeText(v.getContext(), dataItem.getName(), Toast.LENGTH_SHORT).show();
                 v.getContext().startActivity(intent);
             }
         });
