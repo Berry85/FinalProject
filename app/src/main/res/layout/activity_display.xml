@@ -8,7 +8,7 @@
     tools:context=".display">
 
     <ImageView
-        android:id="@+id/imageView3"
+        android:id="@+id/imageView4"
         android:layout_width="231dp"
         android:layout_height="209dp"
         android:layout_marginTop="150dp"
@@ -69,7 +69,7 @@
         android:layout_marginTop="50dp"
         android:textSize="17sp"
         app:layout_constraintStart_toEndOf="@+id/textView5"
-        app:layout_constraintTop_toBottomOf="@+id/imageView3" />
+        app:layout_constraintTop_toBottomOf="@+id/imageView4" />
 
     <TextView
         android:id="@+id/textView10"
@@ -99,7 +99,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textView11" />
 
     <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar3"
+        android:id="@+id/toolbar_display"
         android:layout_width="409dp"
         android:layout_height="wrap_content"
         android:background="?attr/colorPrimary"

@@ -1,5 +1,6 @@
 package com.example.finalproject;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -15,7 +16,6 @@ import com.example.finalproject.adpater.DataAdpater;
 import com.example.finalproject.model.Data;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -43,8 +43,8 @@ public class MainActivity extends AppCompatActivity {
         floatingActionButton = findViewById(R.id.floatingActionButton);
 
 //        initData(dataList);
-//        Data data = new Data("DAVID", "124512", false, "at3ith@gmail.com", "Sun");
-//        dataList.add(data);
+        Data data = new Data("DAVID", "124512", false, "at3ith@gmail.com", "Sun");
+        dataList.add(data);
 
         recyclerView = findViewById(R.id.recycleview);
         layoutManager = new LinearLayoutManager(this);
@@ -60,23 +60,12 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent();
                 intent.setClass(MainActivity.this, add.class);
-                startActivity(intent);
+                startActivityForResult(intent, 200);
             }
         });
 
-
-    }
-
-    public void initData(List<Data> mdataList) {
-        if (getIntent() == null) {
-            return;
-        }
-        Data data = (Data) getIntent().getExtras().getSerializable("data");
-        int i = mdataList.indexOf(data.getName());
-        mdataList.remove(i);
-        mdataList.add(data);
-        this.dataList = mdataList;
-        recyclerViewAdapter.notifyDataSetChanged();
+        int i = recyclerViewAdapter.getItemViewType(1);
+        Log.d("abc", String.valueOf(i));
     }
 
 
@@ -91,10 +80,19 @@ public class MainActivity extends AppCompatActivity {
         return -1;
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        if (requestCode == 200) {
+            Data data1 = (Data) data.getExtras().getSerializable("data");
+            dataList.add(data1);
+            recyclerViewAdapter.notifyDataSetChanged();
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.toolbar_menu, menu);
+        getMenuInflater().inflate(R.menu.toolbar_main, menu);
         return super.onCreateOptionsMenu(menu);
     }
 }
