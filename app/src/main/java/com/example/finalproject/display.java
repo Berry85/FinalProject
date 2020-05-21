@@ -24,7 +24,7 @@ public class display extends AppCompatActivity {
     private TextView textView9, textView10, textView11, textView12;
     private Data data;
     private boolean favorite;
-
+    private int position;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,8 +39,11 @@ public class display extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_display);
         toolbar.setBackgroundColor(getResources().getColor(R.color.toolbar));
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
 
-        data = (Data) this.getIntent().getExtras().getSerializable("item");
+        data = (Data) this.getIntent().getExtras().getSerializable("data2");
+        position = this.getIntent().getIntExtra("position", 0);
 
         favorite = data.isFavorite();
         String name = data.getName();
@@ -87,8 +90,6 @@ public class display extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_display);
-        Menu menu = toolbar.getMenu();
         switch (item.getItemId()) {
             case R.id.edit:
                 Intent intent = new Intent();
@@ -105,7 +106,25 @@ public class display extends AppCompatActivity {
                 intent.putExtras(bundle1);
                 intent.setClass(display.this, edit.class);
                 startActivityForResult(intent, 100);
-
+                break;
+            case android.R.id.home:
+                Intent intent2 = new Intent();
+                String name2, phone2, email2, Note2;
+                boolean favorite2;
+                name2 = this.textView9.getText().toString();
+                phone2 = this.textView10.getText().toString();
+                email2 = this.textView11.getText().toString();
+                Note2 = this.textView12.getText().toString();
+                favorite2 = favorite;
+                Data data2 = new Data(name2, phone2, favorite2, email2, Note2);
+                Bundle bundle2 = new Bundle();
+                Log.d("abc", data2.toString());
+                bundle2.putSerializable("data2", data2);
+                intent2.putExtra("position", position);
+                intent2.putExtras(bundle2);
+                setResult(201, intent2);
+                finish();
+                break;
             default:
                 break;
         }
@@ -115,13 +134,11 @@ public class display extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if (resultCode == 100) {
-
-            Data data2 = (Data) data.getExtras().getSerializable("data1");
-            Log.d("abc", data2.toString());
-            textView9.setText(data2.getName());
-            textView10.setText(data2.getPhone());
-            textView11.setText(data2.getEmail());
-            textView12.setText(data2.getNote());
+            Data data3 = (Data) data.getExtras().getSerializable("data1");
+            textView9.setText(data3.getName());
+            textView10.setText(data3.getPhone());
+            textView11.setText(data3.getEmail());
+            textView12.setText(data3.getNote());
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
@@ -131,4 +148,5 @@ public class display extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.display_toolbar, menu);
         return super.onCreateOptionsMenu(menu);
     }
+
 }

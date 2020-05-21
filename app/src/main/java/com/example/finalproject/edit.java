@@ -36,10 +36,16 @@ public class edit extends AppCompatActivity {
 
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_edit);
-        toolbar.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+        toolbar.setBackgroundColor(getResources().getColor(R.color.toolbar));
         setSupportActionBar(toolbar);
-        getData();
 
+        getData();
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
 
         button.setOnClickListener(new View.OnClickListener() {
             @Override

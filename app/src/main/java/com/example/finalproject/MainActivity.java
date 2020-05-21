@@ -1,11 +1,14 @@
 package com.example.finalproject;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -64,8 +67,23 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        int i = recyclerViewAdapter.getItemViewType(1);
-        Log.d("abc", String.valueOf(i));
+        ItemTouchHelper.SimpleCallback simpleCallback = new ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP | ItemTouchHelper.DOWN, ItemTouchHelper.START | ItemTouchHelper.END) {
+
+
+            @Override
+            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+                return true;
+            }
+
+            @Override
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+
+            }
+
+        };
+
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleCallback);
+        itemTouchHelper.attachToRecyclerView(recyclerView);
     }
 
 
@@ -82,10 +100,23 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        if (requestCode == 200) {
-            Data data1 = (Data) data.getExtras().getSerializable("data");
-            dataList.add(data1);
-            recyclerViewAdapter.notifyDataSetChanged();
+
+        switch (resultCode) {
+            case 200:
+                Data data1 = (Data) data.getExtras().getSerializable("data");
+                dataList.add(data1);
+                recyclerViewAdapter.notifyItemInserted(dataList.size());
+                break;
+            case 201:
+                Data data2 = (Data) data.getExtras().getSerializable("data2");
+                int position = data.getIntExtra("position", -1);
+                dataList.remove(position);
+                dataList.add(data2);
+                recyclerViewAdapter.notifyItemRemoved(position);
+                recyclerViewAdapter.notifyItemInserted(position);
+                break;
+            default:
+                break;
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
@@ -95,6 +126,8 @@ public class MainActivity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.toolbar_main, menu);
         return super.onCreateOptionsMenu(menu);
     }
+
+
 }
 
 
