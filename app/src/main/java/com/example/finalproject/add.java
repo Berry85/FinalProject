@@ -1,11 +1,18 @@
 package com.example.finalproject;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -20,6 +27,8 @@ public class add extends AppCompatActivity {
     EditText editText1, editText2, editText3, editText4;
     ImageView imageView;
 
+    private final static int RESULT_LOAD_IMAGE = 203;
+    private String imagePath;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +44,19 @@ public class add extends AppCompatActivity {
         editText3 = findViewById(R.id.editText7);
         editText4 = findViewById(R.id.editText8);
         button = findViewById(R.id.button10);
+        imageView = findViewById(R.id.imageView5);
+
+
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(
+                        Intent.ACTION_PICK,
+                        MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(intent, RESULT_LOAD_IMAGE);
+            }
+        });
+
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -42,7 +64,7 @@ public class add extends AppCompatActivity {
                 String phone = editText2.getText().toString();
                 String email = editText3.getText().toString();
                 String note = editText4.getText().toString();
-                Data data = new Data(name, phone, false, email, note);
+                Data data = new Data(name, phone, false, email, note, imagePath);
                 Intent intent = new Intent();
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("data", data);
@@ -69,5 +91,30 @@ public class add extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.toolbar_back, menu);
         return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        switch (resultCode) {
+            case RESULT_OK:
+                Uri selectImage = data.getData();
+                String[] filePathColumn = {MediaStore.Images.Media.DATA};
+                Cursor cursor = getContentResolver().query(selectImage, filePathColumn, null, null, null);
+                cursor.moveToFirst();
+
+                int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+                String PicturePath = cursor.getString(columnIndex);
+                cursor.close();
+
+                Bitmap bitmap = BitmapFactory.decodeFile(PicturePath);
+                imageView.setImageBitmap(bitmap);
+                imagePath = PicturePath;
+
+                Log.d("abc", PicturePath);
+                break;
+            default:
+                break;
+        }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 }

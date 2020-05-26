@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
         floatingActionButton = findViewById(R.id.floatingActionButton);
 
 //        initData(dataList);
-        Data data = new Data("DAVID", "124512", false, "at3ith@gmail.com", "Sun");
+        Data data = new Data("橘喵喵", "11111111111", false, "at3ith@gmail.com", "压塌坑的橘喵喵", "/storage/emulated/0/Pictures/1.jpg");
         dataList.add(data);
 
         recyclerView = findViewById(R.id.recycleview);

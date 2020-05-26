@@ -12,14 +12,16 @@ public class Data implements Serializable {
     private boolean favorite;
     private String email;
     private String note;
+    private String imagePath;
 
 
-    public Data(String name, String phone, boolean favorite, String email, String note) {
+    public Data(String name, String phone, boolean favorite, String email, String note, String imagePath) {
         this.name = name;
         this.phone = phone;
         this.favorite = favorite;
         this.email = email;
         this.note = note;
+        this.imagePath = imagePath;
     }
 
     public String getName() {
@@ -62,12 +64,21 @@ public class Data implements Serializable {
         this.note = note;
     }
 
+    public String getImagePath() {
+        return imagePath;
+    }
+
+    public void setImagePath(String imagePath) {
+        this.imagePath = imagePath;
+    }
+
     @NonNull
     @Override
     public String toString() {
         return "Name:" + this.getName() + "/n" +
                 "phone:" + this.getPhone() + "/n" +
                 "note:" + this.getNote() + "/n" +
-                "email:" + this.getEmail() + "/n";
+                "email:" + this.getEmail() + "/n" +
+                "imagePath:" + this.getImagePath() + "/n";
     }
 }

@@ -1,8 +1,16 @@
 package com.example.finalproject;
 
+import android.Manifest;
+import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -10,13 +18,23 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.annotation.LongDef;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
 
 import com.example.finalproject.model.Data;
+
+import java.io.IOException;
+import java.io.InputStream;
+
+import static android.Manifest.*;
+
 
 public class display extends AppCompatActivity {
     private Button button2;//编辑
@@ -25,6 +43,8 @@ public class display extends AppCompatActivity {
     private Data data;
     private boolean favorite;
     private int position;
+    private String ImagePath, Note, name, phone, email;
+
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,20 +62,24 @@ public class display extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
 
+//获取数据
         data = (Data) this.getIntent().getExtras().getSerializable("data2");
         position = this.getIntent().getIntExtra("position", 0);
 
-        favorite = data.isFavorite();
-        String name = data.getName();
-        String phone = data.getPhone();
-        String email = data.getEmail();
-        String Note = data.getNote();
 
+        favorite = data.isFavorite();
+        name = data.getName();
+        phone = data.getPhone();
+        email = data.getEmail();
+        Note = data.getNote();
+        ImagePath = data.getImagePath();
+
+        //设定
         textView9.setText(name);
         textView10.setText(phone);
         textView11.setText(email);
         textView12.setText(Note);
-
+        imageView.setImageBitmap(BitmapFactory.decodeFile(ImagePath));
 
         //点击电话跳转至拨号
         textView10.setOnClickListener(new View.OnClickListener() {
@@ -94,14 +118,7 @@ public class display extends AppCompatActivity {
             case R.id.edit:
                 Intent intent = new Intent();
                 Bundle bundle1 = new Bundle();
-                String name, phone, email, Note;
-                boolean favorite1;
-                name = textView9.getText().toString();
-                phone = textView10.getText().toString();
-                email = textView11.getText().toString();
-                Note = textView12.getText().toString();
-                favorite1 = favorite;
-                Data data1 = new Data(name, phone, favorite1, email, Note);
+                Data data1 = new Data(name, phone, favorite, email, Note, ImagePath);
                 bundle1.putSerializable("data", data1);
                 intent.putExtras(bundle1);
                 intent.setClass(display.this, edit.class);
@@ -109,16 +126,8 @@ public class display extends AppCompatActivity {
                 break;
             case android.R.id.home:
                 Intent intent2 = new Intent();
-                String name2, phone2, email2, Note2;
-                boolean favorite2;
-                name2 = this.textView9.getText().toString();
-                phone2 = this.textView10.getText().toString();
-                email2 = this.textView11.getText().toString();
-                Note2 = this.textView12.getText().toString();
-                favorite2 = favorite;
-                Data data2 = new Data(name2, phone2, favorite2, email2, Note2);
+                Data data2 = new Data(name, phone, favorite, email, Note, ImagePath);
                 Bundle bundle2 = new Bundle();
-                Log.d("abc", data2.toString());
                 bundle2.putSerializable("data2", data2);
                 intent2.putExtra("position", position);
                 intent2.putExtras(bundle2);
@@ -133,12 +142,17 @@ public class display extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        if (resultCode == 100) {
-            Data data3 = (Data) data.getExtras().getSerializable("data1");
-            textView9.setText(data3.getName());
-            textView10.setText(data3.getPhone());
-            textView11.setText(data3.getEmail());
-            textView12.setText(data3.getNote());
+
+        switch (resultCode) {
+            case 100:
+                Data data3 = (Data) data.getExtras().getSerializable("data1");
+                textView9.setText(data3.getName());
+                textView10.setText(data3.getPhone());
+                textView11.setText(data3.getEmail());
+                textView12.setText(data3.getNote());
+                break;
+            default:
+                break;
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
