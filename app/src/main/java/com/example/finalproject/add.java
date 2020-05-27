@@ -2,9 +2,11 @@ package com.example.finalproject;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -19,6 +21,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.example.finalproject.model.Data;
 
@@ -38,6 +41,8 @@ public class add extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_add);
         toolbar.setBackgroundColor(getResources().getColor(R.color.toolbar));
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
 
         editText1 = findViewById(R.id.editText5);
         editText2 = findViewById(R.id.editText6);
@@ -45,7 +50,6 @@ public class add extends AppCompatActivity {
         editText4 = findViewById(R.id.editText8);
         button = findViewById(R.id.button10);
         imageView = findViewById(R.id.imageView5);
-
 
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -64,6 +68,22 @@ public class add extends AppCompatActivity {
                 String phone = editText2.getText().toString();
                 String email = editText3.getText().toString();
                 String note = editText4.getText().toString();
+
+                if (name.trim().isEmpty()) {
+                    Toast.makeText(add.this, "你的名字为空", Toast.LENGTH_SHORT).show();
+                    Log.d("abc", name);
+                    return;
+                } else if (phone.trim().isEmpty()) {
+                    Toast.makeText(add.this, "你的电话为空", Toast.LENGTH_SHORT).show();
+                    return;
+                } else if (email.trim().isEmpty()) {
+                    Toast.makeText(add.this, "你的邮箱为空", Toast.LENGTH_SHORT).show();
+                    return;
+                } else if (imagePath == null) {
+                    Toast.makeText(add.this, "你的图片尚未选择", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
                 Data data = new Data(name, phone, false, email, note, imagePath);
                 Intent intent = new Intent();
                 Bundle bundle = new Bundle();
@@ -71,6 +91,7 @@ public class add extends AppCompatActivity {
                 intent.putExtras(bundle);
                 setResult(200, intent);
                 finish();
+
             }
         });
 
@@ -79,8 +100,25 @@ public class add extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.back:
-                finish();
+            case android.R.id.home:
+                AlertDialog.Builder builder = new AlertDialog.Builder(add.this);
+                builder.setMessage("放弃编辑？");
+                builder.setTitle("WARNING");
+                builder.setIcon(getResources().getDrawable(R.drawable.ic_warning_black_24dp));
+                builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+                builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        finish();
+                    }
+                });
+                builder.show();
+                break;
             default:
                 break;
         }

@@ -1,5 +1,6 @@
 package com.example.finalproject;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -8,11 +9,14 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 
+import androidx.annotation.DrawableRes;
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -46,6 +50,8 @@ public class edit extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_edit);
         toolbar.setBackgroundColor(getResources().getColor(R.color.toolbar));
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
 
         getData();
         imageView.setOnClickListener(new View.OnClickListener() {
@@ -79,6 +85,34 @@ public class edit extends AppCompatActivity {
 
     }
 
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                AlertDialog.Builder builder = new AlertDialog.Builder(edit.this);
+                builder.setMessage("放弃编辑？");
+                builder.setTitle("WARNING");
+                builder.setIcon(getResources().getDrawable(R.drawable.ic_warning_black_24dp));
+                builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+                builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        finish();
+                    }
+                });
+                builder.show();
+                break;
+            default:
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
     public void getData() {
         Intent intent = getIntent();
         Bundle bundle = intent.getExtras();
@@ -107,8 +141,6 @@ public class edit extends AppCompatActivity {
                 Bitmap bitmap = BitmapFactory.decodeFile(PicturePath);
                 imageView.setImageBitmap(bitmap);
                 imagePATH = PicturePath;
-
-                Log.d("abc", PicturePath);
                 break;
             default:
                 break;
