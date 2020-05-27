@@ -66,10 +66,7 @@ public class DataAdpater extends RecyclerView.Adapter<DataAdpater.MyViewHolder> 
                 }
             }
         });
-
-
         return vh;
-
     }
 
     @Override

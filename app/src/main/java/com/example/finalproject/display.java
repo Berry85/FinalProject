@@ -126,7 +126,12 @@ public class display extends AppCompatActivity {
                 break;
             case android.R.id.home:
                 Intent intent2 = new Intent();
-                Data data2 = new Data(name, phone, favorite, email, Note, ImagePath);
+                String name2, phone2, email2, Note2;
+                name2 = textView9.getText().toString();
+                phone2 = textView10.getText().toString();
+                email2 = textView11.getText().toString();
+                Note2 = textView12.getText().toString();
+                Data data2 = new Data(name2, phone2, favorite, email2, Note2, ImagePath);
                 Bundle bundle2 = new Bundle();
                 bundle2.putSerializable("data2", data2);
                 intent2.putExtra("position", position);
@@ -150,6 +155,8 @@ public class display extends AppCompatActivity {
                 textView10.setText(data3.getPhone());
                 textView11.setText(data3.getEmail());
                 textView12.setText(data3.getNote());
+                ImagePath = data3.getImagePath();
+                imageView.setImageBitmap(BitmapFactory.decodeFile(ImagePath));
                 break;
             default:
                 break;

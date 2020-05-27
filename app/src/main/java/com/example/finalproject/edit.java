@@ -39,6 +39,7 @@ public class edit extends AppCompatActivity {
         editText2 = findViewById(R.id.editText2);
         editText3 = findViewById(R.id.editText3);
         editText4 = findViewById(R.id.editText4);
+
         button = findViewById(R.id.button);
 
 
@@ -86,7 +87,8 @@ public class edit extends AppCompatActivity {
         editText2.setText(data.getPhone());
         editText3.setText(data.getEmail());
         editText4.setText(data.getNote());
-        imageView.setImageBitmap(BitmapFactory.decodeFile(data.getImagePath()));
+        imagePATH = data.getImagePath();
+        imageView.setImageBitmap(BitmapFactory.decodeFile(imagePATH));
     }
 
     @Override

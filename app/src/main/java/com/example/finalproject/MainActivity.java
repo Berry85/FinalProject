@@ -8,18 +8,22 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.Context;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.SearchView;
+import android.widget.Toast;
 
 import com.example.finalproject.adpater.DataAdpater;
 import com.example.finalproject.model.Data;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -72,30 +76,32 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+                int fromPosition = viewHolder.getAdapterPosition();
+                int toPosition = target.getAdapterPosition();
+                if (fromPosition < toPosition) {
+                    for (int i = fromPosition; i < toPosition; i++) {
+                        Collections.swap(dataList, i, i + 1);
+                    }
+                } else {
+                    for (int i = fromPosition; i > toPosition; i--) {
+                        Collections.swap(dataList, i, i - 1);
+                    }
+                }
+                recyclerViewAdapter.notifyItemMoved(fromPosition, toPosition);
                 return true;
             }
 
             @Override
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-
+                int position = viewHolder.getAdapterPosition();
+                dataList.remove(position);
+                recyclerViewAdapter.notifyItemRemoved(position);
             }
 
         };
 
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleCallback);
         itemTouchHelper.attachToRecyclerView(recyclerView);
-    }
-
-
-    public int search(String name, List list) {
-        Pattern pattern = Pattern.compile(name, Pattern.CASE_INSENSITIVE);
-        for (int i = 0; i < list.size(); i++) {
-            Matcher matcher = pattern.matcher(((Data) list.get(i)).getName());
-            if (matcher.matches()) {
-                return i;
-            }
-        }
-        return -1;
     }
 
     @Override
@@ -109,11 +115,9 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case 201:
                 Data data2 = (Data) data.getExtras().getSerializable("data2");
-                int position = data.getIntExtra("position", -1);
-                dataList.remove(position);
-                dataList.add(data2);
-                recyclerViewAdapter.notifyItemRemoved(position);
-                recyclerViewAdapter.notifyItemInserted(position);
+                int position = data.getIntExtra("position", 0);
+                dataList.set(position, data2);
+                recyclerViewAdapter.notifyItemChanged(position, data2);
                 break;
             default:
                 break;
@@ -124,9 +128,40 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.toolbar_main, menu);
+        MenuItem searchItem = menu.findItem(R.id.search_action);
+        final SearchView searchView = (SearchView) searchItem.getActionView();
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                onQueryTextChange(query);
+                if (id == -1) {
+                    Toast.makeText(getApplicationContext(), "NOT FOUND!!!", Toast.LENGTH_SHORT).show();
+                } else {
+                    recyclerView.scrollToPosition(id);
+                }
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                id = search(newText, dataList);
+                return false;
+            }
+        });
         return super.onCreateOptionsMenu(menu);
     }
 
+    public int search(String name, List list) {
+        Pattern pattern = Pattern.compile(name, Pattern.CASE_INSENSITIVE);
+        for (int i = 0; i < list.size(); i++) {
+            Matcher matcher = pattern.matcher(((Data) list.get(i)).getName());
+            if (matcher.matches()) {
+                return i;
+            }
+        }
+        return -1;
+    }
 
 }
 
