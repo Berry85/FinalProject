@@ -12,6 +12,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -170,4 +171,25 @@ public class display extends AppCompatActivity {
         return super.onCreateOptionsMenu(menu);
     }
 
+    @Override
+    public boolean dispatchKeyEvent(KeyEvent event) {
+        if (event.getKeyCode() == KeyEvent.KEYCODE_BACK) {
+            Intent intent2 = new Intent();
+            String name2, phone2, email2, Note2;
+            name2 = textView9.getText().toString();
+            phone2 = textView10.getText().toString();
+            email2 = textView11.getText().toString();
+            Note2 = textView12.getText().toString();
+            Data data2 = new Data(name2, phone2, favorite, email2, Note2, ImagePath);
+            Bundle bundle2 = new Bundle();
+            bundle2.putSerializable("data2", data2);
+            intent2.putExtra("position", position);
+            intent2.putExtras(bundle2);
+            setResult(201, intent2);
+            finish();
+            return true;
+        } else {
+            return super.dispatchKeyEvent(event);
+        }
+    }
 }
