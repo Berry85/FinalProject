@@ -1,17 +1,9 @@
 package com.example.finalproject;
 
-import android.Manifest;
-import android.app.Activity;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.database.Cursor;
-import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-import android.provider.MediaStore;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -19,22 +11,13 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import androidx.annotation.LongDef;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.app.ActivityCompat;
 
 import com.example.finalproject.model.Data;
-
-import java.io.IOException;
-import java.io.InputStream;
-
-import static android.Manifest.*;
 
 
 public class display extends AppCompatActivity {
@@ -88,7 +71,7 @@ public class display extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent1 = new Intent();
                 intent1.setAction(Intent.ACTION_DIAL);
-                String tel = data.getPhone();
+                String tel = (String) textView10.getText();
                 String str = "tel:" + tel;
                 intent1.setData(Uri.parse(str));
                 startActivity(intent1);

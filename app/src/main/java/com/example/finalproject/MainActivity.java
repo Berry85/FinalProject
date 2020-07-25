@@ -1,5 +1,13 @@
 package com.example.finalproject;
 
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.SearchView;
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -7,16 +15,6 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-
-import android.content.Intent;
-import android.os.Bundle;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.SearchView;
-import android.widget.Toast;
 
 import com.example.finalproject.adpater.DataAdpater;
 import com.example.finalproject.model.Data;
@@ -28,7 +26,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static android.widget.TextView.*;
+import static android.widget.TextView.OnClickListener;
 
 public class MainActivity extends AppCompatActivity {
     private List<Data> dataList = new ArrayList<>();
@@ -49,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
 
         floatingActionButton = findViewById(R.id.floatingActionButton);
 
-        Data data = new Data("橘喵喵", "11111111111", false, "at3ith@gmail.com", "压塌坑的橘喵喵", "/storage/emulated/0/Pictures/1.jpg");
+        Data data = new Data("橘喵喵", "11111111111", false, "at3ith@gmail.com", "压塌坑的橘喵喵", "/storage/emulated/0/Pictures/喀蓝一家/1.jpg");
         dataList.add(data);
 
         recyclerView = findViewById(R.id.recycleview);
