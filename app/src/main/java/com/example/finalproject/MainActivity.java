@@ -1,7 +1,10 @@
 package com.example.finalproject;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -12,6 +15,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -28,6 +32,7 @@ import java.util.regex.Pattern;
 
 import static android.widget.TextView.OnClickListener;
 
+
 public class MainActivity extends AppCompatActivity {
     private List<Data> dataList = new ArrayList<>();
     private RecyclerView recyclerView;
@@ -35,11 +40,16 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView.LayoutManager layoutManager;
     private int id;
     private FloatingActionButton floatingActionButton;
+    private static final int WRITE_PERMISSION = 0X01;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+
+        }
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setBackgroundColor(getResources().getColor(R.color.toolbar));
@@ -47,8 +57,27 @@ public class MainActivity extends AppCompatActivity {
 
         floatingActionButton = findViewById(R.id.floatingActionButton);
 
-        Data data = new Data("橘喵喵", "11111111111", false, "at3ith@gmail.com", "压塌坑的橘喵喵", "/storage/emulated/0/Pictures/喀蓝一家/1.jpg");
+        Data data = new Data("橘喵喵", "11111", false, "at3ith@gmail.com", "", "/storage/emulated/0/DCIM/喀蓝一家/5.jpg");
         dataList.add(data);
+        data = new Data("happy", "1214", true, "happy@gmail.com", "", "/storage/emulated/0/DCIM//喀蓝一家/2.jpg");
+        dataList.add(data);
+        data = new Data("Kevin", "7834", false, "Kevin@gmail.com", "", "/storage/emulated/0/DCIM/喀蓝一家/3.jpg");
+        dataList.add(data);
+        data = new Data("GREEN", "5438", false, "GREEN@gmail.com", "", "/storage/emulated/0/DCIM/喀蓝一家/4.jpg");
+        dataList.add(data);
+        data = new Data("Good", "78678", false, "Good@gmail.com", "", "/storage/emulated/0/DCIM/喀蓝一家/5.jpg");
+        dataList.add(data);
+        data = new Data("David", "12345", false, "David@gmail.com", "", "/storage/emulated/0/DCIM/喀蓝一家/6.jpg");
+        dataList.add(data);
+        data = new Data("WARRAN", "798481", false, "WARRAN@gmail.com", "", "/storage/emulated/0/DCIM/喀蓝一家/7.jpg");
+        dataList.add(data);
+        data = new Data("Rainbow", "1496489", false, "Rainbow@gmail.com", "", "/storage/emulated/0/DCIM/喀蓝一家/8.jpg");
+        dataList.add(data);
+        data = new Data("Black", "7834453", false, "Black@gmail.com", "", "/storage/emulated/0/DCIM/喀蓝一家/9.jpg");
+        dataList.add(data);
+        data = new Data("Blue", "7867676", false, "Blue@gmail.com", "", "/storage/emulated/0/DCIM/喀蓝一家/10.jpg");
+        dataList.add(data);
+
 
         recyclerView = findViewById(R.id.recycleview);
         layoutManager = new LinearLayoutManager(this);
@@ -159,6 +188,18 @@ public class MainActivity extends AppCompatActivity {
         }
         return -1;
     }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (requestCode == WRITE_PERMISSION) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Log.d("Permission", "Write Permission Failed");
+                Toast.makeText(this, "You must allow permission", Toast.LENGTH_SHORT).show();
+                finish();
+            }
+        }
+    }
+
 
 }
 
